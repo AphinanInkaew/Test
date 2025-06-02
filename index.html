@@ -18,6 +18,9 @@
             border-bottom: 1px solid #ddd;
         }
     </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 </head>
 <body>
     <h1>ขอพี่ลองหน่อยดิ๊๊๊</h1>
@@ -34,7 +37,19 @@
     <div class="message-list" id="messageList"></div>
 
     <script>
-        let count = 1;
+        // ใส่ config ของโปรเจกต์ Firebase ของคุณเองที่นี่
+        const firebaseConfig = {
+            apiKey: "AIzaSyAeoJlpXfqbOpHR0iCs3TtNjLQ8cTcYMiM",
+            authDomain: "test-bdc6c.firebaseapp.com",
+            databaseURL: "https://test-bdc6c-default-rtdb.firebaseio.com",
+            projectId: "test-bdc6c",
+            storageBucket: "test-bdc6c.appspot.com",
+            messagingSenderId: "357759539145",
+            appId: "1:357759539145:web:e222cc78ef1610b7a7ba18"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         function addMessage() {
             const name = document.getElementById('nameInput').value.trim();
             const msg = document.getElementById('msgInput').value.trim();
@@ -42,14 +57,26 @@
                 alert('กรุณากรอกชื่อและข้อความ');
                 return;
             }
-            const list = document.getElementById('messageList');
-            const item = document.createElement('div');
-            item.className = 'message-item';
-            item.innerHTML = `<b>${count}.</b> <span style="color:blue">${name}</span>: ${msg}`;
-            list.appendChild(item);
-            count++;
+            db.ref('messages').push({
+                name: name,
+                text: msg
+            });
             document.getElementById('msgInput').value = '';
         }
+
+        // โหลดข้อความทั้งหมดและอัปเดตอัตโนมัติ
+        db.ref('messages').on('value', snapshot => {
+            const list = document.getElementById('messageList');
+            list.innerHTML = '';
+            let count = 1;
+            snapshot.forEach(child => {
+                const data = child.val();
+                const item = document.createElement('div');
+                item.className = 'message-item';
+                item.innerHTML = `<b>${count++}.</b> <span style="color:blue">${data.name}</span>: ${data.text}`;
+                list.appendChild(item);
+            });
+        });
     </script>
 </body>
 </html>
