@@ -4,11 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ขอพี่ลองหน่อยดิ๊๊๊</title>
+    <style>
+        .input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .message-list {
+            margin-top: 20px;
+        }
+        .message-item {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
 </head>
 <body>
     <h1>ขอพี่ลองหน่อยดิ๊๊๊</h1>
     <p>นี่คือหน้า HTML ที่สร้างขึ้นเพื่อทดสอบการแสดงผลของข้อความ "ขอพี่ลองหน่อยดิ๊๊๊" บนเว็บเพจ</p>
     <p>คืองี้เว้ยสบ คิดไอเดียวให้หน่อยว่าจะเขียนเว็บอะไรเพื่อฝึกดี ไหนๆก็ฝึกละ ทำมันมาใช้งานดูหน่อย</p>
-    <img="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.readawrite.com%2Fc%2F3932fa14a8ebd65c945c3f3da3b80d50&psig=AOvVaw1w8o0N2s5jmuvL-N8evmpS&ust=1748947746598000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMiYiZvI0o0DFQAAAAAdAAAAABAE" alt="ตัวอย่างรูปภาพ" width="300" height="200">
+    <img src="image/Screenshot 2024-11-13 181142.png" alt="ตัวอย่างรูปภาพ" style="max-width: 25%; height: auto;">
+
+    <div class="input-row">
+        <input type="text" id="nameInput" placeholder="กรอกชื่อ" style="flex:1; padding: 10px;">
+        <input type="text" id="msgInput" placeholder="พิมพ์ข้อความที่นี่" style="flex:2; padding: 10px;">
+        <button onclick="addMessage()">ส่ง</button>
+    </div>
+
+    <div class="message-list" id="messageList"></div>
+
+    <script>
+        let count = 1;
+        function addMessage() {
+            const name = document.getElementById('nameInput').value.trim();
+            const msg = document.getElementById('msgInput').value.trim();
+            if (!name || !msg) {
+                alert('กรุณากรอกชื่อและข้อความ');
+                return;
+            }
+            const list = document.getElementById('messageList');
+            const item = document.createElement('div');
+            item.className = 'message-item';
+            item.innerHTML = `<b>${count}.</b> <span style="color:blue">${name}</span>: ${msg}`;
+            list.appendChild(item);
+            count++;
+            document.getElementById('msgInput').value = '';
+        }
+    </script>
 </body>
 </html>
